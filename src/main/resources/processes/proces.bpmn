@@ -15,6 +15,7 @@
           <activiti:value id="3" name="Drugi fakultet"/>
         </activiti:formProperty>
         <activiti:formProperty id="proba" name="proba"/>
+        <activiti:formProperty id="proba" name="proba"/>
       </extensionElements>
     </userTask>
     <subProcess activiti:exclusive="true" id="subprocess1" name="Proces kada predaju stari i ostali studenti zahtev" triggeredByEvent="false">
@@ -312,7 +313,7 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[if ${vrsta_studenta==2 || vrsta_studenta==3}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="sid-1CBFC89D-E681-4ECA-9FFC-D581FE3505F0" sourceRef="sid-2A0ACD7F-7E05-4E84-A7BB-F3147E69E143" targetRef="subprocess2">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[if ${vrsta_studenta==1}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[if ${vrsta_studenta=="Redovan"}]]></conditionExpression>
     </sequenceFlow>
     <boundaryEvent attachedToRef="subprocess5" cancelActivity="true" id="boundarytimer6" name="Timer">
       <timerEventDefinition id="boundarytimer6_ED_1">

@@ -1,9 +1,11 @@
 package com.example;
 
+import com.google.gson.Gson;
 import com.sun.javafx.collections.MappingChange;
 import org.activiti.engine.*;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.form.FormProperty;
+import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
@@ -11,12 +13,16 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Djordje on 4/15/2017.
@@ -108,16 +114,58 @@ public class TryControler {
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
-    public void checkIfTasks(String username, String password){
+    public Response checkIfTasks(String username, String password){
 
-        List<Task> tasks = taskService.createTaskQuery().taskCandidateUser("referentStudentskeSluzbe").list();
+        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("referentStudentskeSluzbe").list();
         System.out.println(tasks.size());
+        List<Task> studentsTasks = taskService.createTaskQuery().taskCandidateGroup("student").list();
+        System.out.println(studentsTasks.size());
 
-        List<Task> student = taskService.createTaskQuery().taskCandidateGroup("student").list();
-        System.out.println(student.size());
+        Task task = studentsTasks.get(0);
+        String taskId = task.getId();
 
+        TaskFormData tfd =formService.getTaskFormData(taskId);
+        List<FormProperty> fp = tfd.getFormProperties();
 
+        String form = formService.getTaskFormData(taskId).getFormKey();
+        System.out.println(taskId);
+
+        Gson gson = new Gson();
+        String json = gson.toJson(fp);
+        return Response.ok(json, MediaType.APPLICATION_JSON_VALUE).build();
     }
 
 
+    @RequestMapping(value="/execute/{taskId}", method = RequestMethod.POST)
+    public Response execcuteTask(@PathVariable String taskId, String username){
+
+        for (Task t : taskService.createTaskQuery().taskCandidateUser(username).list()){
+            if (t.getId().equals(taskId)){
+                System.out.println(t.getName());
+            }
+        }
+        Map<String, String > params = new HashMap<>();
+        params.put("ime_studenta", "Djoko");
+        params.put("prezime_studenta", "Salic");
+        params.put("broj_indeksa", "sf13-2014");
+        params.put("predlog_teme","testTEma");
+        params.put("predlog_mentora", "TEst Test");
+        params.put("vrsta_studenta", "1");
+        formService.submitTaskFormData(taskId, params);
+//        String userId = user.getUsername();
+//        String message;
+//        if (canExecute(taskId, userId)){
+//            //pre ovog koraka bi se trebala sprovesti validacija
+//            //da li su uneti svi potrebni parametri (required), da li ima neslaganja tipova
+//            //ako se unosi email adresa, da li je validna i sl.
+//            formService.submitTaskFormData(taskId, params);
+//            message = "Zadatak uspešno izvršen";
+//        }
+//        else
+//            message = "Ne možete izvršiti zadatak";
+//
+//        model.addAttribute("message", message);
+//        return showUsersTasks(model);
+        return Response.ok("").build();
+    }
 }
