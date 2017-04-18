@@ -10,6 +10,7 @@ import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.identity.Group;
 import org.activiti.engine.identity.User;
 import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,6 +32,8 @@ import java.util.Map;
 @RequestMapping
 public class TryControler {
 
+    private static final String filename = "processes/proces.bpmn";
+
     @Autowired
     private TaskService taskService;
 
@@ -43,17 +46,21 @@ public class TryControler {
     @Autowired
     private IdentityService identityService;
 
+    @Autowired
+    private RepositoryService repositoryService;
+
     @RequestMapping(value = "/start", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
     public void startProcess(String username, String password){
 
         List<User> users = identityService.createUserQuery().userId(username).list();
 
+        for (Deployment d : repositoryService.createDeploymentQuery().list())
+            repositoryService.deleteDeployment(d.getId(), true);
 
         try {
             identityService.setAuthenticatedUserId(users.toString());
-            HashMap<String, Object> parameters = new HashMap<>();
-            parameters.put("Owner", username);
-            runtimeService.startProcessInstanceByKey("procesZavrsetkaMasterStudija",parameters);
+            repositoryService.createDeployment().addClasspathResource(filename).deploy();
+            runtimeService.startProcessInstanceByKey("procesZavrsetkaMasterStudija");
         } finally {
             identityService.setAuthenticatedUserId(null);
         }
@@ -61,10 +68,10 @@ public class TryControler {
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         RepositoryService repositoryService = processEngine.getRepositoryService();
         for (Deployment d : repositoryService.createDeploymentQuery().list()) {
-
+            System.out.println(d.getTenantId());
             System.out.println(""+ runtimeService.createProcessInstanceQuery().count());
         }
-
+        System.out.println("Ukupan broj deployment-a: " + repositoryService.createDeploymentQuery().count());
     }
 
     @RequestMapping(value = "/init", method = RequestMethod.GET)
@@ -93,10 +100,10 @@ public class TryControler {
         identityService.saveUser(user2);
 
         // Add admin group
-        Group group2 = identityService.newGroup("referentStudentskeSluzbe");
+        Group group2 = identityService.newGroup("ReferentSS");
         identityService.saveGroup(group2);
 
-        identityService.createMembership(username2, "referentStudentskeSluzbe");
+        identityService.createMembership(username2, "ReferentSS");
 
 
         String username3 = "Zora";
@@ -107,22 +114,44 @@ public class TryControler {
         identityService.saveUser(user3);
 
         // Add admin group
-        Group group3 = identityService.newGroup("RukovodilacStudijskogPrograma");
+        Group group3 = identityService.newGroup("RukovodilacPrograma");
         identityService.saveGroup(group3);
 
-        identityService.createMembership(username3, "RukovodilacStudijskogPrograma");
+        identityService.createMembership(username3, "RukovodilacPrograma");
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public Response checkIfTasks(String username, String password){
 
-        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("referentStudentskeSluzbe").list();
-        System.out.println(tasks.size());
-        List<Task> studentsTasks = taskService.createTaskQuery().taskCandidateGroup("student").list();
-        System.out.println(studentsTasks.size());
+//        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("referentStudentskeSluzbe").list();
+//        System.out.println(tasks.size());
+//        List<Task> studentsTasks = taskService.createTaskQuery().taskCandidateGroup("student").list();
+//        System.out.println(studentsTasks.size());
 
-        Task task = studentsTasks.get(0);
-        String taskId = task.getId();
+        List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee("student").list();
+        System.out.println(studentsTasks2.size());
+
+        List<Task> referenSSTasks = taskService.createTaskQuery().taskAssignee("ReferentSS").list();
+        System.out.println(referenSSTasks.size());
+
+        List<Task> rukovodilacProgramaTasks = taskService.createTaskQuery().taskAssignee("RukovodilacPrograma").list();
+        System.out.println(rukovodilacProgramaTasks.size());
+        String taskId = "";
+        if(studentsTasks2.size()>0){
+            Task task = studentsTasks2.get(0);
+            taskId = task.getId();
+            System.out.println(task.getName().toString());
+        }
+        if(referenSSTasks.size()>0){
+            Task task = referenSSTasks.get(0);
+            taskId = task.getId();
+            System.out.println(task.getName().toString());
+        }
+        if(rukovodilacProgramaTasks.size()>0){
+            Task task = rukovodilacProgramaTasks.get(0);
+            taskId = task.getId();
+            System.out.println(task.getName().toString());
+        }
 
         TaskFormData tfd =formService.getTaskFormData(taskId);
         List<FormProperty> fp = tfd.getFormProperties();
@@ -150,7 +179,7 @@ public class TryControler {
         params.put("broj_indeksa", "sf13-2014");
         params.put("predlog_teme","testTEma");
         params.put("predlog_mentora", "TEst Test");
-        params.put("vrsta_studenta", "1");
+        params.put("vrsta_studenta", "true");
         formService.submitTaskFormData(taskId, params);
 //        String userId = user.getUsername();
 //        String message;
