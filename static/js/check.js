@@ -9,6 +9,7 @@ $(document).ready(function () {
             contentType:"application/json",
             dataType:"application/json",
             success: function(data){
+
                 for(var i = 0; i< data.length; i++){
                     $("#task-title").append(data[i].name);
                 }
