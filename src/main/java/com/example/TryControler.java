@@ -149,8 +149,15 @@ public class TryControler {
         }
         System.out.println(allTasks.toString());
 
+        MyTask mt = allTasks.get(0);
+        TaskFormData tfd = formService.getTaskFormData(mt.getId());
+        List<FormProperty> fpList = tfd.getFormProperties();
+        for(FormProperty f : fpList){
+            System.out.println(f.getType().getName().toString());
+        }
+
         Gson gson = new Gson();
-        String json = gson.toJson(allTasks);
+        String json = gson.toJson(fpList);
         System.out.println(json);
         return new ResponseEntity<String>(json,HttpStatus.OK);
     }

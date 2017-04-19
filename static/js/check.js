@@ -6,12 +6,10 @@ $(document).ready(function () {
         $.ajax({
             method:"POST",
             url:"http://localhost:8080/check?username=Kermit",
-            contentType:"application/json",
-            dataType:"application/json",
             success: function(data){
-
-                for(var i = 0; i< data.length; i++){
-                    $("#task-title").append(data[i].name);
+                var json = JSON.parse(data);
+                for(var i = 0; i< json.length; i++){
+                    $("#task-title").append("<div>"+jsonData[i].name +"</div><button>Claim task</button>");
                 }
 
 
