@@ -464,15 +464,15 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundarytimer4" id="Shape-boundarytimer4">
-        <omgdc:Bounds height="32.0" width="32.0" x="202.51340378148498" y="337.82182369329416"/>
+        <omgdc:Bounds height="32.0" width="32.0" x="220.51340378148498" y="356.0"/>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="0.0" width="0.0" x="-31.486596218515018" y="36.821823693294164"/>
+          <omgdc:Bounds height="0.0" width="1.0" x="-13.486596218515018" y="-16.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundarytimer5" id="Shape-boundarytimer5">
-        <omgdc:Bounds height="32.0" width="32.0" x="432.73802682996967" y="381.7569787161576"/>
+        <omgdc:Bounds height="32.0" width="32.0" x="474.0" y="375.0"/>
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="0.0" width="0.0" x="47.73802682996967" y="105.75697871615762"/>
+          <omgdc:Bounds height="1.0" width="0.0" x="-16.0" y="99.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="startevent4" id="Shape-startevent4">
@@ -959,7 +959,7 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow53" id="BPMNEdge_flow53" sourceElement="boundarytimer4" targetElement="mailtask2">
-        <omgdi:waypoint x="213.43223563716998" y="369.0"/>
+        <omgdi:waypoint x="221.2837663544983" y="369.0"/>
         <omgdi:waypoint x="196.0" y="369.0"/>
         <omgdi:waypoint x="196.0" y="489.0"/>
         <omgdi:waypoint x="234.0" y="490.0"/>
@@ -983,7 +983,7 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow55" id="BPMNEdge_flow55" sourceElement="boundarytimer5" targetElement="mailtask3">
-        <omgdi:waypoint x="464.4919333848296" y="394.0"/>
+        <omgdi:waypoint x="505.7162336455017" y="394.0"/>
         <omgdi:waypoint x="537.0" y="394.0"/>
         <omgdi:waypoint x="537.0" y="489.0"/>
         <omgdi:waypoint x="490.0" y="490.0"/>

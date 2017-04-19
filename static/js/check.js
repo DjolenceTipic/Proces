@@ -8,6 +8,11 @@ $(document).ready(function () {
             url:"http://localhost:8080/check?username=Kermit",
             contentType:"application/json",
             success: function(data){
+                alert(data.length);
+                for(var i = 0; i< data.length; i++){
+                    $("#task-title").append(data[i].name);
+                }
+
 
             },
             error: function(request, options, error) {

@@ -25,6 +25,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -127,71 +128,23 @@ public class TryControler {
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public ResponseEntity<String> checkIfTasks(String username){
 
-
-
-        GroupQuery groupName = identityService.createGroupQuery().groupMember(username);
-        System.out.println(groupName.toString());
-
-        List<Task> studentsTasks = taskService.createTaskQuery().taskAssignee(username).list();
-        System.out.println(studentsTasks.size());
-
-        List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee("student").list();
-        System.out.println(studentsTasks2.size());
-
-        List<Task> studentsTasks22 = taskService.createTaskQuery().taskCandidateOrAssigned("student").list();
-        System.out.println(studentsTasks22.size());
-
-        List<Task> studentsTasks222 = taskService.createTaskQuery().taskCandidateGroup("student").list();
-        System.out.println(studentsTasks222.size());
-
-
-        List<Task> referenSSTasks = taskService.createTaskQuery().taskAssignee("ReferentSS").list();
-        System.out.println(referenSSTasks.size());
-
-        List<Task> rukovodilacProgramaTasks = taskService.createTaskQuery().taskAssignee("RukovodilacPrograma").list();
-        System.out.println(rukovodilacProgramaTasks.size());
-        String taskId = "";
-        if(studentsTasks2.size()>0){
-            Task task = studentsTasks2.get(0);
-            taskId = task.getId();
-            System.out.println(task.getName().toString());
-        }
-        if(referenSSTasks.size()>0){
-            Task task = referenSSTasks.get(0);
-            taskId = task.getId();
-            System.out.println(task.getName().toString());
-        }
-        if(rukovodilacProgramaTasks.size()>0){
-            Task task = rukovodilacProgramaTasks.get(0);
-            taskId = task.getId();
-            System.out.println(task.getName().toString());
-        }
-
-        for (Task t : taskService.createTaskQuery().taskCandidateUser(username).list()){
-            if (t.getId().equals(taskId)){
-                System.out.println("true1");
+        List<User>users =identityService.createUserQuery().userId(username).list();
+        User current = users.get(0);
+        System.out.println(current.toString());
+        List<Task> allTasks = new ArrayList<Task>();
+        List<Group> groups = identityService.createGroupQuery().groupMember(username).list();
+        for(Group g: groups){
+            List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee(g.getId()).list();
+            for(Task t : studentsTasks2){
+                allTasks.add(t);
             }
-            System.out.println("false1");
+            System.out.println(studentsTasks2.size());
         }
-
-
-        for (Task t : taskService.createTaskQuery().taskAssignee(username).list()){
-            if (t.getId().equals(taskId)){
-                System.out.println("true2");
-            }
-            System.out.println("false2");
-        }
-
-        TaskFormData tfd =formService.getTaskFormData(taskId);
-        List<FormProperty> fp = tfd.getFormProperties();
-
-        String form = formService.getTaskFormData(taskId).getFormKey();
-        System.out.println(taskId);
-
+        System.out.println(allTasks.toString());
         Gson gson = new Gson();
-        String json = gson.toJson(fp);
+        String json = gson.toJson(allTasks);
         System.out.println(json);
-        return new ResponseEntity<String>("Hello World"+json, HttpStatus.OK);
+        return new ResponseEntity<String>(json, HttpStatus.OK);
     }
 
 
