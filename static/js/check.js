@@ -7,9 +7,8 @@ $(document).ready(function () {
             method:"POST",
             url:"http://localhost:8080/check?username=Kermit",
             success: function(data){
-                alert(JSON.parse(data));
-                var jsonData = JSON.parse(data);
-                for(var i = 0; i< jsonData.length; i++){
+                var json = JSON.parse(data);
+                for(var i = 0; i< json.length; i++){
                     $("#task-title").append("<div>"+jsonData[i].name +"</div><button>Claim task</button>");
                 }
 
