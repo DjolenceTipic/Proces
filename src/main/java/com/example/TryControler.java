@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import com.sun.javafx.collections.MappingChange;
 import models.MyForm;
 import models.MyTask;
 import org.activiti.engine.*;
@@ -139,7 +138,7 @@ public class TryControler {
         List<MyTask> allTasks = new ArrayList<MyTask>();
         List<Group> groups = identityService.createGroupQuery().groupMember(username).list();
         for(Group g: groups){
-            List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee(g.getId()).list();
+            List<Task> studentsTasks2 = taskService.createTaskQuery().taskCandidateGroup(g.getId()).list();
             for(Task t : studentsTasks2){
                 MyTask mt = new MyTask();
                 mt.setId(t.getId());
