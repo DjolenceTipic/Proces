@@ -8,12 +8,16 @@ import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
 import org.activiti.engine.identity.Group;
+import org.activiti.engine.identity.GroupQuery;
 import org.activiti.engine.identity.User;
+import org.activiti.engine.identity.UserQuery;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -121,15 +125,25 @@ public class TryControler {
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
-    public Response checkIfTasks(String username, String password){
+    public ResponseEntity<String> checkIfTasks(String username){
 
-//        List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("referentStudentskeSluzbe").list();
-//        System.out.println(tasks.size());
-//        List<Task> studentsTasks = taskService.createTaskQuery().taskCandidateGroup("student").list();
-//        System.out.println(studentsTasks.size());
+
+
+        GroupQuery groupName = identityService.createGroupQuery().groupMember(username);
+        System.out.println(groupName.toString());
+
+        List<Task> studentsTasks = taskService.createTaskQuery().taskAssignee(username).list();
+        System.out.println(studentsTasks.size());
 
         List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee("student").list();
         System.out.println(studentsTasks2.size());
+
+        List<Task> studentsTasks22 = taskService.createTaskQuery().taskCandidateOrAssigned("student").list();
+        System.out.println(studentsTasks22.size());
+
+        List<Task> studentsTasks222 = taskService.createTaskQuery().taskCandidateGroup("student").list();
+        System.out.println(studentsTasks222.size());
+
 
         List<Task> referenSSTasks = taskService.createTaskQuery().taskAssignee("ReferentSS").list();
         System.out.println(referenSSTasks.size());
@@ -153,6 +167,20 @@ public class TryControler {
             System.out.println(task.getName().toString());
         }
 
+        for (Task t : taskService.createTaskQuery().taskCandidateUser(username).list()){
+            if (t.getId().equals(taskId)){
+                System.out.println("true1");
+            }
+            System.out.println("false1");
+        }
+
+        for (Task t : taskService.createTaskQuery().taskAssignee(username).list()){
+            if (t.getId().equals(taskId)){
+                System.out.println("true2");
+            }
+            System.out.println("false2");
+        }
+
         TaskFormData tfd =formService.getTaskFormData(taskId);
         List<FormProperty> fp = tfd.getFormProperties();
 
@@ -161,18 +189,28 @@ public class TryControler {
 
         Gson gson = new Gson();
         String json = gson.toJson(fp);
-        return Response.ok(json, MediaType.APPLICATION_JSON_VALUE).build();
+        System.out.println(json);
+        return new ResponseEntity<String>("Hello World"+json, HttpStatus.OK);
     }
 
 
     @RequestMapping(value="/execute/{taskId}", method = RequestMethod.POST)
     public Response execcuteTask(@PathVariable String taskId, String username){
 
+        Task task = null;
         for (Task t : taskService.createTaskQuery().taskCandidateUser(username).list()){
             if (t.getId().equals(taskId)){
                 System.out.println(t.getName());
+                task = t;
             }
         }
+        TaskFormData tfd =  formService.getTaskFormData(taskId);
+        List<FormProperty>   fpList = tfd.getFormProperties();
+        for(FormProperty fp: fpList){
+            System.out.println(fp.getName());
+            System.out.println(fp.getType());
+        }
+
         Map<String, String > params = new HashMap<>();
         params.put("ime_studenta", "Djoko");
         params.put("prezime_studenta", "Salic");

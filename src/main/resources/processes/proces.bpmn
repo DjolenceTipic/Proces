@@ -2,7 +2,7 @@
 <definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
   <process id="procesZavrsetkaMasterStudija" name="Proces zavrsetka master studija" isExecutable="true">
     <startEvent id="startevent1" name="Start" activiti:initiator="initiator"/>
-    <userTask id="studentPodnosiZahtevZaZavrsetakStudija" name="Podnosenje zahteva za zavrsetak master studija" activiti:assignee="student" activiti:candidateUsers="initiator" activiti:candidateGroups="student">
+    <userTask id="studentPodnosiZahtevZaZavrsetakStudija" name="Podnosenje zahteva za zavrsetak master studija" activiti:candidateGroups="student">
       <extensionElements>
         <activiti:formProperty id="ime_studenta" name="Ime_Studenta" type="string" required="true"/>
         <activiti:formProperty id="prezime_studenta" name="PrezimeStudenta" type="string" required="true"/>
@@ -13,7 +13,7 @@
       </extensionElements>
     </userTask>
     <subProcess id="subprocess1" name="Proces kada predaju stari i ostali studenti zahtev">
-      <userTask id="usertask2" name="Referent salje zahtev rukovodiocu" activiti:assignee="ReferentSS" activiti:candidateGroups="ReferentSS">
+      <userTask id="usertask2" name="Referent salje zahtev rukovodiocu" activiti:candidateGroups="ReferentSS">
         <extensionElements>
           <activiti:formProperty id="posalji" name="posalji" type="boolean" required="true"/>
         </extensionElements>
@@ -89,7 +89,7 @@
     <sequenceFlow id="flow9" sourceRef="subprocess1" targetRef="exclusivegateway1"/>
     <subProcess id="subprocess2" name="Proces odobrenja za izradu master rada">
       <startEvent id="startevent4" name="Start"/>
-      <userTask id="usertask14" name="Rukovodilac studijskog programa razgovara sa studentom" activiti:assignee="RukovodilacPrograma" activiti:candidateGroups="RukovodilacPrograma">
+      <userTask id="usertask14" name="Rukovodilac studijskog programa razgovara sa studentom" activiti:candidateGroups="RukovodilacPrograma">
         <extensionElements>
           <activiti:formProperty id="kandidat_odgovara_temi" name="KandidatOdgovaraTemi" type="boolean" required="true"/>
         </extensionElements>
@@ -365,10 +365,10 @@
         <omgdc:Bounds height="72.0" width="105.0" x="385.0" y="454.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundarytimer5" id="BPMNShape_boundarytimer5">
-        <omgdc:Bounds height="31.0" width="31.0" x="445.53328361367824" y="381.9532335656759"/>
+        <omgdc:Bounds height="31.0" width="31.0" x="432.73802682996967" y="381.7569787161576"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundarytimer4" id="BPMNShape_boundarytimer4">
-        <omgdc:Bounds height="31.0" width="31.0" x="218.01340378148498" y="353.32182369329416"/>
+        <omgdc:Bounds height="31.0" width="31.0" x="202.51340378148498" y="337.82182369329416"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
         <omgdc:Bounds height="40.0" width="40.0" x="773.0" y="379.0"/>
@@ -386,7 +386,7 @@
         <omgdc:Bounds height="30.0" width="30.0" x="470.0" y="748.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask14" id="BPMNShape_usertask14">
-        <omgdc:Bounds height="91.0" width="105.0" x="560.0" y="720.0"/>
+        <omgdc:Bounds height="91.0" width="105.0" x="555.0" y="720.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="usertask15" id="BPMNShape_usertask15">
         <omgdc:Bounds height="91.0" width="105.0" x="849.0" y="720.0"/>
@@ -500,16 +500,16 @@
         <omgdc:Bounds height="73.0" width="105.0" x="1630.0" y="550.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundaryerror4" id="BPMNShape_boundaryerror4">
-        <omgdc:Bounds height="30.0" width="30.0" x="999.0" y="1307.0"/>
+        <omgdc:Bounds height="30.0" width="30.0" x="984.0" y="1292.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundaryerror2" id="BPMNShape_boundaryerror2">
-        <omgdc:Bounds height="30.0" width="30.0" x="353.0" y="958.0"/>
+        <omgdc:Bounds height="30.0" width="30.0" x="338.0" y="943.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="sid-2A0ACD7F-7E05-4E84-A7BB-F3147E69E143" id="BPMNShape_sid-2A0ACD7F-7E05-4E84-A7BB-F3147E69E143">
         <omgdc:Bounds height="40.0" width="40.0" x="336.0" y="644.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="boundarytimer6" id="BPMNShape_boundarytimer6">
-        <omgdc:Bounds height="31.0" width="31.0" x="1156.5" y="611.5"/>
+        <omgdc:Bounds height="31.0" width="31.0" x="1141.0" y="596.0"/>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="izgovorActivity" id="BPMNShape_izgovorActivity">
         <omgdc:Bounds height="80.0" width="100.0" x="1039.0" y="542.0"/>
@@ -565,8 +565,8 @@
         <omgdi:waypoint x="497.990607306348" y="946.5127447703898"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow121" id="BPMNEdge_flow121">
-        <omgdi:waypoint x="665.0" y="765.2908366533865"/>
-        <omgdi:waypoint x="718.0793650793651" y="765.0793650793651"/>
+        <omgdi:waypoint x="660.0" y="765.2988505747127"/>
+        <omgdi:waypoint x="718.0763358778626" y="765.0763358778626"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow122" id="BPMNEdge_flow122">
         <omgdi:waypoint x="738.1086956521739" y="784.8913043478261"/>
@@ -599,8 +599,8 @@
         <omgdi:waypoint x="1411.2523659305994" y="583.7476340694006"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow82" id="BPMNEdge_flow82">
-        <omgdi:waypoint x="499.9971173248509" y="763.2940611240167"/>
-        <omgdi:waypoint x="560.0" y="764.4705882352941"/>
+        <omgdi:waypoint x="499.9968772769517" y="763.3060587199378"/>
+        <omgdi:waypoint x="555.0" y="764.4285714285714"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow126" id="BPMNEdge_flow126">
         <omgdi:waypoint x="901.7486338797814" y="811.0"/>
@@ -665,7 +665,7 @@
         <omgdi:waypoint x="1366.0" y="1090.7164179104477"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow65" id="BPMNEdge_flow65">
-        <omgdi:waypoint x="353.00370233252585" y="973.3332510592772"/>
+        <omgdi:waypoint x="338.3710935604013" y="961.3158854596423"/>
         <omgdi:waypoint x="278.0" y="975.0"/>
         <omgdi:waypoint x="251.04651162790697" y="690.0"/>
       </bpmndi:BPMNEdge>
@@ -678,8 +678,8 @@
         <omgdi:waypoint x="1222.0" y="582.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="sid-BA08F75D-CB2E-4F3D-83C6-DE2C2882824E" id="BPMNEdge_sid-BA08F75D-CB2E-4F3D-83C6-DE2C2882824E">
-        <omgdi:waypoint x="1158.3738402666836" y="619.6123230361537"/>
-        <omgdi:waypoint x="1139.0" y="609.1084337349398"/>
+        <omgdi:waypoint x="1142.2971478103964" y="605.2928275615807"/>
+        <omgdi:waypoint x="1139.0" y="603.8518518518518"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow118" id="BPMNEdge_flow118">
         <omgdi:waypoint x="1097.0" y="1328.111111111111"/>
@@ -708,7 +708,7 @@
         <omgdi:waypoint x="1150.5260115606936" y="1293.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow53" id="BPMNEdge_flow53">
-        <omgdi:waypoint x="218.01357861364215" y="368.8954427554054"/>
+        <omgdi:waypoint x="205.38815469858244" y="362.3136580775935"/>
         <omgdi:waypoint x="196.0" y="369.0"/>
         <omgdi:waypoint x="196.0" y="489.0"/>
         <omgdi:waypoint x="234.0" y="489.41988950276243"/>
@@ -730,7 +730,7 @@
         <omgdi:waypoint x="1300.0" y="937.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow55" id="BPMNEdge_flow55">
-        <omgdi:waypoint x="476.5172941284683" y="396.7493739362951"/>
+        <omgdi:waypoint x="463.72760271084996" y="396.68861348987207"/>
         <omgdi:waypoint x="537.0" y="394.0"/>
         <omgdi:waypoint x="537.0" y="489.0"/>
         <omgdi:waypoint x="490.0" y="489.4723618090452"/>
@@ -791,7 +791,7 @@
         <omgdi:waypoint x="1457.282208588957" y="808.0"/>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge bpmnElement="flow113" id="BPMNEdge_flow113">
-        <omgdi:waypoint x="999.0455678797614" y="1323.1683150093936"/>
+        <omgdi:waypoint x="984.073854528794" y="1308.4866678756182"/>
         <omgdi:waypoint x="246.0" y="1382.0"/>
         <omgdi:waypoint x="247.42289239204933" y="690.0"/>
       </bpmndi:BPMNEdge>
