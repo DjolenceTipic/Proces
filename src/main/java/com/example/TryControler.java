@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.sun.javafx.collections.MappingChange;
+import models.MyForm;
 import models.MyTask;
 import org.activiti.engine.*;
 import org.activiti.engine.delegate.DelegateExecution;
@@ -149,15 +150,23 @@ public class TryControler {
         }
         System.out.println(allTasks.toString());
 
-        MyTask mt = allTasks.get(0);
-        TaskFormData tfd = formService.getTaskFormData(mt.getId());
-        List<FormProperty> fpList = tfd.getFormProperties();
-        for(FormProperty f : fpList){
-            System.out.println(f.getType().getName().toString());
+        for(MyTask mt: allTasks){
+            List<MyForm> myForms = new ArrayList<>();
+            TaskFormData tfd = formService.getTaskFormData(mt.getId());
+            List<FormProperty> fpList = tfd.getFormProperties();
+            for(FormProperty f : fpList){
+                MyForm mf = new MyForm();
+                mf.setId(f.getId());
+                mf.setName(f.getName());
+                mf.setType(f.getType().getName().toString());
+                myForms.add(mf);
+            }
+            mt.setMyFormList(myForms);
         }
 
+
         Gson gson = new Gson();
-        String json = gson.toJson(fpList);
+        String json = gson.toJson(allTasks);
         System.out.println(json);
         return new ResponseEntity<String>(json,HttpStatus.OK);
     }
