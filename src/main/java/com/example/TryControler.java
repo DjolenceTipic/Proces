@@ -1,7 +1,11 @@
 package com.example;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.sun.javafx.collections.MappingChange;
+import models.MyTask;
 import org.activiti.engine.*;
 import org.activiti.engine.delegate.DelegateExecution;
 import org.activiti.engine.form.FormProperty;
@@ -131,20 +135,24 @@ public class TryControler {
         List<User>users =identityService.createUserQuery().userId(username).list();
         User current = users.get(0);
         System.out.println(current.toString());
-        List<Task> allTasks = new ArrayList<Task>();
+        List<MyTask> allTasks = new ArrayList<MyTask>();
         List<Group> groups = identityService.createGroupQuery().groupMember(username).list();
         for(Group g: groups){
             List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee(g.getId()).list();
             for(Task t : studentsTasks2){
-                allTasks.add(t);
+                MyTask mt = new MyTask();
+                mt.setId(t.getId());
+                mt.setName(t.getName());
+                allTasks.add(mt);
             }
             System.out.println(studentsTasks2.size());
         }
         System.out.println(allTasks.toString());
+
         Gson gson = new Gson();
         String json = gson.toJson(allTasks);
         System.out.println(json);
-        return new ResponseEntity<String>(json, HttpStatus.OK);
+        return new ResponseEntity<String>(json,HttpStatus.OK);
     }
 
 
