@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,6 @@ import java.util.Map;
  * Created by Djordje on 4/15/2017.
  */
 @RestController
-@RequestMapping
 public class TryControler {
 
     private static final String filename = "processes/proces.bpmn";
@@ -131,14 +131,13 @@ public class TryControler {
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public ResponseEntity<String> checkIfTasks(String username){
-
+        System.out.println(username);
         List<User>users =identityService.createUserQuery().userId(username).list();
         User current = users.get(0);
-        System.out.println(current.toString());
         List<MyTask> allTasks = new ArrayList<MyTask>();
         List<Group> groups = identityService.createGroupQuery().groupMember(username).list();
         for(Group g: groups){
-            List<Task> studentsTasks2 = taskService.createTaskQuery().taskCandidateGroup(g.getId()).list();
+            List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee(g.getId()).list();
             for(Task t : studentsTasks2){
                 MyTask mt = new MyTask();
                 mt.setId(t.getId());
@@ -170,9 +169,10 @@ public class TryControler {
         return new ResponseEntity<String>(json,HttpStatus.OK);
     }
 
-
     @RequestMapping(value="/execute/{taskId}", method = RequestMethod.POST)
-    public Response execcuteTask(@PathVariable String taskId, String username){
+    public Response execcuteTask(@PathVariable String taskId, String username, @RequestParam Map<String,String> allRequestParams){
+
+        System.out.println(allRequestParams);
 
         Task task = null;
         for (Task t : taskService.createTaskQuery().taskCandidateUser(username).list()){
@@ -196,20 +196,29 @@ public class TryControler {
         params.put("predlog_mentora", "TEst Test");
         params.put("vrsta_studenta", "true");
         formService.submitTaskFormData(taskId, params);
-//        String userId = user.getUsername();
-//        String message;
-//        if (canExecute(taskId, userId)){
-//            //pre ovog koraka bi se trebala sprovesti validacija
-//            //da li su uneti svi potrebni parametri (required), da li ima neslaganja tipova
-//            //ako se unosi email adresa, da li je validna i sl.
-//            formService.submitTaskFormData(taskId, params);
-//            message = "Zadatak uspešno izvršen";
-//        }
-//        else
-//            message = "Ne možete izvršiti zadatak";
-//
-//        model.addAttribute("message", message);
-//        return showUsersTasks(model);
         return Response.ok("").build();
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public Response login(String username, String password){
+        try {
+            Boolean checked = identityService.checkPassword(username, password);
+            if(checked){// Return the token on the response{
+                System.out.println(username);
+                return Response.ok(username,javax.ws.rs.core.MediaType.APPLICATION_JSON).build();
+            }
+            else
+                return Response.status(Response.Status.NOT_FOUND).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.UNAUTHORIZED).build();
+        }
+    }
+
+
+    @RequestMapping(value =  "/checkAll", method = RequestMethod.GET)
+    public void checkAll(){
+        List<Task> allTasks = taskService.createTaskQuery().active().list();
+        for(Task t: allTasks)
+            System.out.println(t.toString());
     }
 }

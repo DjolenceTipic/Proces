@@ -5,10 +5,38 @@
     <title>Title</title>
     <script type="text/javascript" src="js/jquery-2.1.0.min.js"></script>
     <script type="text/javascript" src="js/check.js"></script>
+    <link rel="stylesheet"  type="text/css" href="css/main.css"/>
 </head>
 <body>
     Activiti Spring Rest Pokusaj
 
+    <button id="loginButton">LogIn</button>
+    <div id="myModalLogIn" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close" id="loginClose">&times;</span>
+            <p>Welcome back:</p>
+            <form>
+                <table id="loginFormTable">
+                    <tr>
+                        <td align="right">Username:</td>
+                        <td>
+                            <input value="" type="text" name="usernameLogin" id="usernameLogin"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Password:</td>
+                        <td>
+                            <input value="" type="password" name="passwordLogin" id="passwordLogin"/>
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <button  id="loginSubmit" >Login</button>
+        </div>
+    </div>
+
+    <p id="welcome"></p>
     <button id="check"> Check </button>
 
     <div id="tasks">
