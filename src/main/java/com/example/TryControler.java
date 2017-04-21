@@ -90,11 +90,11 @@ public class TryControler {
         String username = "Kermit";
         User user = identityService.newUser(username);
         user.setPassword("123");
+        user.setEmail("proba@proba.com");
         user.setFirstName("Manually");
         user.setLastName("created");
         identityService.saveUser(user);
 
-        // Add admin group
         Group group = identityService.newGroup("student");
         identityService.saveGroup(group);
 
@@ -104,11 +104,11 @@ public class TryControler {
         String username2 = "Gospava";
         User user2 = identityService.newUser(username2);
         user2.setPassword("123");
+        user2.setEmail("proba@proba.com");
         user2.setFirstName("Manually");
         user2.setLastName("created");
         identityService.saveUser(user2);
 
-        // Add admin group
         Group group2 = identityService.newGroup("ReferentSS");
         identityService.saveGroup(group2);
 
@@ -118,35 +118,83 @@ public class TryControler {
         String username3 = "Zora";
         User user3 = identityService.newUser(username3);
         user3.setPassword("123");
+        user3.setEmail("proba@proba.com");
         user3.setFirstName("Manually");
         user3.setLastName("created");
         identityService.saveUser(user3);
 
-        // Add admin group
         Group group3 = identityService.newGroup("RukovodilacPrograma");
         identityService.saveGroup(group3);
 
         identityService.createMembership(username3, "RukovodilacPrograma");
+
+        String username4 = "dekan";
+        User user4 = identityService.newUser(username4);
+        user4.setPassword("123");
+        user4.setEmail("proba@proba.com");
+        user4.setFirstName("Manually");
+        user4.setLastName("created");
+        identityService.saveUser(user4);
+
+        Group group4 = identityService.newGroup("RukovodilacPrograma");
+        identityService.saveGroup(group4);
+
+        identityService.createMembership(username4, "RukovodilacPrograma");
+
+        String username5 = "zapsinicar";
+        User user5 = identityService.newUser(username5);
+        user5.setPassword("123");
+        user5.setEmail("proba@proba.com");
+        user5.setFirstName("Manually");
+        user5.setLastName("created");
+        identityService.saveUser(user4);
+
+        Group group5 = identityService.newGroup("RukovodilacPrograma");
+        identityService.saveGroup(group5);
+
+        identityService.createMembership(username5, "RukovodilacPrograma");
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public ResponseEntity<String> checkIfTasks(String username){
-        System.out.println(username);
+        System.out.println("Username u check metodi je: "+username);
         List<User>users =identityService.createUserQuery().userId(username).list();
         User current = users.get(0);
+        System.out.println("current user u metodi: "+current.getId().toUpperCase());
         List<MyTask> allTasks = new ArrayList<MyTask>();
-        List<Group> groups = identityService.createGroupQuery().groupMember(username).list();
+        List<Group> groups = identityService.createGroupQuery().groupMember(current.getId()).list();
         for(Group g: groups){
-            List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee(g.getId()).list();
-            for(Task t : studentsTasks2){
+            System.out.println("g.getId() u foreach je: "+g.getId());
+            List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup(g.getId()).list();
+            System.out.println("tasks size: "+tasks);
+            for(Task t : tasks){
+                System.out.println(t.getId());
                 MyTask mt = new MyTask();
                 mt.setId(t.getId());
                 mt.setName(t.getName());
                 allTasks.add(mt);
             }
-            System.out.println(studentsTasks2.size());
+
+//            List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee(g.getId()).list();
+//            System.out.println("studentsTasks2 size: "+studentsTasks2);
+//            for(Task t : studentsTasks2){
+//                System.out.println(t.getId());
+//                MyTask mt = new MyTask();
+//                mt.setId(t.getId());
+//                mt.setName(t.getName());
+//                allTasks.add(mt);
+//                System.out.println(mt.toString());
+//            }
+//            List<Task> studentsTasks22 = taskService.createTaskQuery().taskCandidateOrAssigned(g.getId()).list();
+//            System.out.println("studentsTasks22 size: "+studentsTasks22);
+//            for(Task t : studentsTasks22){
+//                System.out.println(t.getId());
+////                MyTask mt = new MyTask();
+////                mt.setId(t.getId());
+////                mt.setName(t.getName());
+////                allTasks.add(mt);
+//            }
         }
-        System.out.println(allTasks.toString());
 
         for(MyTask mt: allTasks){
             List<MyForm> myForms = new ArrayList<>();
@@ -183,20 +231,33 @@ public class TryControler {
         }
         TaskFormData tfd =  formService.getTaskFormData(taskId);
         List<FormProperty>   fpList = tfd.getFormProperties();
+        Map<String, String> params = new HashMap<>();
         for(FormProperty fp: fpList){
-            System.out.println(fp.getName());
             System.out.println(fp.getType());
+            for(String s: allRequestParams.keySet()){
+                System.out.println(s);
+                System.out.println("C");
+                if(fp.getName().equals(s)){
+                    if(s.equals("on")||s.equals("off")){
+                        String bool = (s.equals("on"))? "true" : "false";
+                        params.put(fp.getId(), bool);
+                    }else{
+                        params.put(fp.getId(), s);
+                    }
+                    System.out.println(allRequestParams.get(s)+" uraaaa");
+                }
+            }
         }
-
-        Map<String, String > params = new HashMap<>();
-        params.put("ime_studenta", "Djoko");
-        params.put("prezime_studenta", "Salic");
-        params.put("broj_indeksa", "sf13-2014");
-        params.put("predlog_teme","testTEma");
-        params.put("predlog_mentora", "TEst Test");
-        params.put("vrsta_studenta", "true");
         formService.submitTaskFormData(taskId, params);
-        return Response.ok("").build();
+//        Map<String, String > params = new HashMap<>();
+//        params.put("ime_studenta", "Djoko");
+//        params.put("prezime_studenta", "Salic");
+//        params.put("broj_indeksa", "sf13-2014");
+//        params.put("predlog_teme","testTEma");
+//        params.put("predlog_mentora", "TEst Test");
+//        params.put("vrsta_studenta", "true");
+//
+        return Response.ok("Zadatak uspesno izvrsen").build();
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
