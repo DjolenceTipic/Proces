@@ -12,6 +12,12 @@
         <activiti:formProperty id="vrsta_studenta" name="VrstaStudenta" type="boolean" required="true"/>
       </extensionElements>
     </userTask>
+      <callActivity id="subprocess143" calledElement="subprocess1" >
+              <extensionElements>
+                <activiti:formProperty id="ispunjenost_uslova" name="IspunjenostUslova" type="boolean" required="true"/>
+                <activiti:formProperty id="zavrsava_studije" name="ZavrsavaStudije" type="boolean"/>
+              </extensionElements>
+        </callActivity>
     <subProcess id="subprocess1" name="Proces kada predaju stari i ostali studenti zahtev">
       <userTask id="usertask2" name="Referent salje zahtev rukovodiocu" activiti:candidateGroups="ReferentSS">
         <extensionElements>
@@ -19,12 +25,17 @@
         </extensionElements>
       </userTask>
       <userTask id="usertask3" name="Rukovodilac i komisija donose odluku o eventualnim dopunama i salju odluku studentskoj sluzbi" activiti:assignee="zapisnicar" activiti:candidateGroups="zapisnicar">
-        <extensionElements>
-          <activiti:formProperty id="ispunjenost_uslova" name="IspunjenostUslova" type="boolean" required="true"/>
-          <activiti:formProperty id="zavrsava_studije" name="ZavrsavaStudije" type="boolean"/>
+          <extensionElements>
+          <activiti:formProperty id="ispunjenost_uslova" name="Ispunjenost uslova" type="boolean"/>
+          <activiti:formProperty id="zavrsene_studije" name="Zavrsene studije" type="boolean"/>
         </extensionElements>
       </userTask>
-      <userTask id="usertask4" name="Dekan izdaje resenje o vrednovanju" activiti:assignee="Dekan" activiti:candidateGroups="Dekan"/>
+        <userTask id="usertask4" name="Dekan izdaje resenje o vrednovanju" activiti:assignee="Dekan" activiti:candidateGroups="Dekan">
+            <extensionElements>
+          <activiti:formProperty id="ispunjenost_uslova" name="Ispunjenost uslova" type="boolean"/>
+          <activiti:formProperty id="zavrsene_studije" name="Zavrsene studije" type="boolean"/>
+        </extensionElements>
+        </userTask>
       <startEvent id="startevent2" name="Start"/>
       <endEvent id="endevent2" name="End"/>
       <userTask id="usertask22" name="Javna odbrana master rada"/>
@@ -77,7 +88,7 @@
       <sequenceFlow id="flow53" sourceRef="boundarytimer4" targetRef="mailtask2"/>
     </subProcess>
     <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"/>
-    <userTask id="usertask5" name="Resefent izdaje uverenje o zavrsetku studija" activiti:candidateGroups="ReferentSluzbe">
+    <userTask id="usertask5" name="Resefent izdaje uverenje o zavrsetku studija" activiti:candidateGroups="ReferentSS">
       <extensionElements>
         <activiti:formProperty id="datum_izdavanja_potvrde" name="Datum izdavanja" type="date" datePattern="MM-dd-yyyy hh:mm" required="true"/>
       </extensionElements>
@@ -91,7 +102,7 @@
           <activiti:formProperty id="kandidat_odgovara_temi" name="KandidatOdgovaraTemi" type="boolean" required="true"/>
         </extensionElements>
       </userTask>
-      <userTask id="usertask15" name="Rukovodilac studijskog programa razgovara sa mentorom" activiti:candidateGroups="rukovodilacPrograma">
+      <userTask id="usertask15" name="Rukovodilac studijskog programa razgovara sa mentorom" activiti:candidateGroups="RukovodilacPrograma">
         <extensionElements>
           <activiti:formProperty id="mentor_odgovara_temi" name="MentorOdgovaraTemi" type="boolean" required="true"/>
         </extensionElements>
@@ -112,27 +123,34 @@
       <userTask id="usertask16" name="Sastavlja se komisija" activiti:assignee="zapisnicar" activiti:candidateGroups="zapisnicar">
         <extensionElements>
           <activiti:formProperty id="mentor_izabrani" name="Mentor" type="string" required="true"/>
-          <activiti:formProperty id="drugi_clan_komisije" name="Drugi clan" type="string"/>
-          <activiti:formProperty id="treci_clan_komisije" name="Treci clan" type="string"/>
+          <activiti:formProperty id="presednik_komisije" name="Presednik" type="string" required="true"/>
+          <activiti:formProperty id="treci_clan" name="TreciClan" type="string" required="true"/>
+          <activiti:formProperty id="cetvrti_clan" name="CetvrtiClan" type="string"/>
+          <activiti:formProperty id="peti_clan" name="PetiClan" type="string"/>
+          <activiti:formProperty id="email1" name="email1" type="string" required="true"/>
+          <activiti:formProperty id="email2" name="email2" type="string" required="true"/>
+          <activiti:formProperty id="email3" name="email3" type="string" required="true"/>
+          <activiti:formProperty id="email4" name="email4" type="string"/>
+          <activiti:formProperty id="email5" name="email5" type="string"/>
         </extensionElements>
       </userTask>
-      <serviceTask id="servicetask6" name="Zapisnik se salje i arhivira u arhivi" activiti:class="Zapisnik"/>
+      <serviceTask id="servicetask6" name="Zapisnik se salje i arhivira u arhivi" activiti:class="com.example.serviceTask.ZapisnikService"/>
       <endEvent id="endevent4" name="End"/>
       <exclusiveGateway id="exclusivegateway18" name="Exclusive Gateway"/>
       <exclusiveGateway id="exclusivegateway20" name="Exclusive Gateway"/>
       <serviceTask id="mailtask4" name="Obavesti profesore da su izabrani" activiti:type="mail">
         <extensionElements>
           <activiti:field name="to">
-            <activiti:string><![CDATA[$user4.email]]></activiti:string>
+            <activiti:expression><![CDATA[${email1}]]></activiti:expression>
+          </activiti:field>
+          <activiti:field name="from">
+            <activiti:string><![CDATA[Fakultet@gtn.com]]></activiti:string>
           </activiti:field>
           <activiti:field name="subject">
-            <activiti:string><![CDATA[d]]></activiti:string>
-          </activiti:field>
-          <activiti:field name="cc">
-            <activiti:string><![CDATA[d]]></activiti:string>
+            <activiti:string><![CDATA[Izabrani se za clana komisije]]></activiti:string>
           </activiti:field>
           <activiti:field name="text">
-            <activiti:string><![CDATA[d]]></activiti:string>
+            <activiti:string><![CDATA[Cestitamo]]></activiti:string>
           </activiti:field>
         </extensionElements>
       </serviceTask>
@@ -161,10 +179,10 @@
     </subProcess>
     <subProcess id="subprocess4" name="Ispunjavanje zadatih uslova">
       <startEvent id="startevent3" name="Start"/>
-      <userTask id="usertask13" name="Student ispunjava uslove" activiti:candidateGroups="Student"/>
+      <userTask id="usertask13" name="Student ispunjava uslove" activiti:candidateGroups="student"/>
       <exclusiveGateway id="exclusivegateway7" name="Exclusive Gateway"/>
       <endEvent id="endevent3" name="End"/>
-      <userTask id="usertask27" name="Provera ispunjenosti uslova" activiti:candidateGroups="ReferentSluzbe">
+      <userTask id="usertask27" name="Provera ispunjenosti uslova" activiti:candidateGroups="ReferentSS">
         <extensionElements>
           <activiti:formProperty id="ispunjenost_islova" name="Ispunjenost uslova" type="boolean"/>
         </extensionElements>
@@ -173,16 +191,16 @@
       <sequenceFlow id="flow49" sourceRef="usertask13" targetRef="usertask27"/>
       <sequenceFlow id="flow51" sourceRef="usertask27" targetRef="exclusivegateway7"/>
       <sequenceFlow id="flow50" sourceRef="exclusivegateway7" targetRef="usertask13">
-        <conditionExpression xsi:type="tFormalExpression"><![CDATA[if ${ispunjenost_islova==false}]]></conditionExpression>
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ispunjenost_islova==false}]]></conditionExpression>
       </sequenceFlow>
       <sequenceFlow id="flow52" sourceRef="exclusivegateway7" targetRef="endevent3">
-        <conditionExpression xsi:type="tFormalExpression"><![CDATA[if ${ispunjenost_islova==true}]]></conditionExpression>
+        <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ispunjenost_islova==true}]]></conditionExpression>
       </sequenceFlow>
     </subProcess>
     <sequenceFlow id="flow47" sourceRef="subprocess4" targetRef="subprocess1"/>
     <subProcess id="subprocess5" name="Izrada master rada">
       <startEvent id="startevent5" name="Start"/>
-      <userTask id="usertask18" name="Student pise rad" activiti:candidateGroups="Student">
+      <userTask id="usertask18" name="Student pise rad" activiti:candidateGroups="student">
         <extensionElements>
           <activiti:formProperty id="posalji_mentoru" name="Posalji" type="boolean"/>
         </extensionElements>
@@ -303,13 +321,13 @@
       <conditionExpression xsi:type="tFormalExpression"><![CDATA[${da_li_je_razlog_valjan == true}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow6" sourceRef="exclusivegateway1" targetRef="usertask5">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ispunjenost_uslova==true} && ${zavrsene_studije== true}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ispunjenost_uslova==true && zavrsene_studije== true}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow11" sourceRef="exclusivegateway1" targetRef="subprocess2">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ispunjenost_uslova==true} && ${zavrsene_studije== false}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ispunjenost_uslova==true && zavrsene_studije== false}]]></conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="flow46" sourceRef="exclusivegateway1" targetRef="subprocess4">
-      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ispunjenost_uslova==false} && ${zavrsene_studije== false}]]></conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${ispunjenost_uslova==false && zavrsene_studije== false}]]></conditionExpression>
     </sequenceFlow>
     <boundaryEvent id="boundaryerror4" name="Error" attachedToRef="subprocess5">
       <errorEventDefinition/>

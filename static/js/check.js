@@ -10,7 +10,7 @@ $(document).ready(function () {
                 success: function(data){
                     var json = JSON.parse(data);
                     for(var i = 0; i< json.length; i++){
-                        $("#task-title").append("<div>"+json[i].name +"</div><button>Claim task</button>");
+                        $("#task-title").append("<div>"+json[i].name +"</div>");
                         $("#task-form").append("<form action='http://localhost:8080/execute/"+json[i].id+"?username="+currentUser+"' method='POST'><table id='form-task'></table></form>")
                         for(var j=0; j< json[0].myFormList.length; j++){
                             if (json[0].myFormList[j].type == "string"){
@@ -52,7 +52,7 @@ $(document).ready(function () {
         loginSubmit.onclick = function (){
             var username = document.getElementById("usernameLogin").value;
             var password = document.getElementById("passwordLogin").value;
-
+            window.localStorage.clear();
             $.ajax({
                 method: "POST",
                 url : "http://localhost:8080/login",
@@ -61,6 +61,7 @@ $(document).ready(function () {
                 success: function(data){
                 alert(data.entity);
                     alert("Succes");
+                    localStorage.clear();
                     localStorage.setItem('currentUser', data.entity);
                 },
                 error: function(error){

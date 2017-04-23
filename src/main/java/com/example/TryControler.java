@@ -30,6 +30,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -77,6 +78,7 @@ public class TryControler {
         ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
         RepositoryService repositoryService = processEngine.getRepositoryService();
         for (Deployment d : repositoryService.createDeploymentQuery().list()) {
+            System.out.println(d.getId());
             System.out.println(d.getTenantId());
             System.out.println(""+ runtimeService.createProcessInstanceQuery().count());
         }
@@ -85,7 +87,6 @@ public class TryControler {
 
     @RequestMapping(value = "/init", method = RequestMethod.GET)
     public void initUser(DelegateExecution execution){
-        //identityService = execution.getEngineServices().getIdentityService();
 
         String username = "Kermit";
         User user = identityService.newUser(username);
@@ -100,7 +101,6 @@ public class TryControler {
 
         identityService.createMembership(username, "student");
 
-
         String username2 = "Gospava";
         User user2 = identityService.newUser(username2);
         user2.setPassword("123");
@@ -113,7 +113,6 @@ public class TryControler {
         identityService.saveGroup(group2);
 
         identityService.createMembership(username2, "ReferentSS");
-
 
         String username3 = "Zora";
         User user3 = identityService.newUser(username3);
@@ -136,64 +135,131 @@ public class TryControler {
         user4.setLastName("created");
         identityService.saveUser(user4);
 
-        Group group4 = identityService.newGroup("RukovodilacPrograma");
+        Group group4 = identityService.newGroup("Dekan");
         identityService.saveGroup(group4);
 
-        identityService.createMembership(username4, "RukovodilacPrograma");
+        identityService.createMembership(username4, "Dekan");
 
-        String username5 = "zapsinicar";
+        String username5 = "zapisnicar";
         User user5 = identityService.newUser(username5);
         user5.setPassword("123");
         user5.setEmail("proba@proba.com");
         user5.setFirstName("Manually");
         user5.setLastName("created");
-        identityService.saveUser(user4);
+        identityService.saveUser(user5);
 
-        Group group5 = identityService.newGroup("RukovodilacPrograma");
+        Group group5 = identityService.newGroup("zapisnicar");
         identityService.saveGroup(group5);
 
-        identityService.createMembership(username5, "RukovodilacPrograma");
+        identityService.createMembership(username5, "zapisnicar");
+
+        String username6 = "bibliotekarka";
+        User user6 = identityService.newUser(username6);
+        user6.setPassword("123");
+        user6.setEmail("proba@proba.com");
+        user6.setFirstName("Manually");
+        user6.setLastName("created");
+        identityService.saveUser(user6);
+
+        Group group6 = identityService.newGroup("bibliotekarka");
+        identityService.saveGroup(group6);
+
+        identityService.createMembership(username6, "bibliotekarka");
+
+        String username7 = "profesor1";
+        User user7 = identityService.newUser(username7);
+        user7.setPassword("123");
+        user7.setEmail("proba@proba.com");
+        user7.setFirstName("Manually");
+        user7.setLastName("created");
+        identityService.saveUser(user7);
+
+        String username8 = "profesor2";
+        User user8 = identityService.newUser(username8);
+        user8.setPassword("123");
+        user8.setEmail("proba@proba.com");
+        user8.setFirstName("Manually");
+        user8.setLastName("created");
+        identityService.saveUser(user8);
+
+        String username9 = "profesor3";
+        User user9 = identityService.newUser(username9);
+        user9.setPassword("123");
+        user9.setEmail("proba@proba.com");
+        user9.setFirstName("Manually");
+        user9.setLastName("created");
+        identityService.saveUser(user9);
+
+        String username10 = "profesor4";
+        User user10 = identityService.newUser(username10);
+        user10.setPassword("123");
+        user10.setEmail("proba@proba.com");
+        user10.setFirstName("Manually");
+        user10.setLastName("created");
+        identityService.saveUser(user10);
+
+        String username11 = "profesor5";
+        User user11 = identityService.newUser(username11);
+        user11.setPassword("123");
+        user11.setEmail("proba@proba.com");
+        user11.setFirstName("Manually");
+        user11.setLastName("created");
+        identityService.saveUser(user11);
+
+        Group group7 = identityService.newGroup("profesor");
+        identityService.saveGroup(group7);
+
+        Group group8 = identityService.newGroup("fakultet1");
+        identityService.saveGroup(group8);
+
+        Group group9 = identityService.newGroup("fakultet2");
+        identityService.saveGroup(group9);
+
+        identityService.createMembership(username7, "profesor");
+        identityService.createMembership(username8, "profesor");
+        identityService.createMembership(username9, "profesor");
+        identityService.createMembership(username10, "profesor");
+        identityService.createMembership(username11, "profesor");
+
+        identityService.createMembership(username7, "fakultet1");
+        identityService.createMembership(username8, "fakultet1");
+        identityService.createMembership(username9, "fakultet1");
+        identityService.createMembership(username10, "fakultet2");
+        identityService.createMembership(username11, "fakultet2");
+
     }
 
     @RequestMapping(value = "/check", method = RequestMethod.POST)
     public ResponseEntity<String> checkIfTasks(String username){
-        System.out.println("Username u check metodi je: "+username);
+        System.out.println(username);
         List<User>users =identityService.createUserQuery().userId(username).list();
         User current = users.get(0);
-        System.out.println("current user u metodi: "+current.getId().toUpperCase());
         List<MyTask> allTasks = new ArrayList<MyTask>();
         List<Group> groups = identityService.createGroupQuery().groupMember(current.getId()).list();
+        System.out.println(groups.size());
         for(Group g: groups){
-            System.out.println("g.getId() u foreach je: "+g.getId());
-            List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup(g.getId()).list();
-            System.out.println("tasks size: "+tasks);
-            for(Task t : tasks){
-                System.out.println(t.getId());
-                MyTask mt = new MyTask();
-                mt.setId(t.getId());
-                mt.setName(t.getName());
-                allTasks.add(mt);
+            System.out.println(g.getId());
+            List<Task> tasks = taskService.createTaskQuery().taskAssignee(g.getId()).list();
+            System.out.println(tasks.size());
+            if(tasks.size()!=0){
+                for(Task t : tasks){
+                    System.out.println(t.getId());
+                    MyTask mt = new MyTask();
+                    mt.setId(t.getId());
+                    mt.setName(t.getName());
+                    allTasks.add(mt);
+                }
+            }else{
+                List<Task> taskList = taskService.createTaskQuery().taskCandidateGroup(g.getId()).list();
+                System.out.println(taskList.size());
+                for(Task t : taskList){
+                    System.out.println(t.getId());
+                    MyTask mt = new MyTask();
+                    mt.setId(t.getId());
+                    mt.setName(t.getName());
+                    allTasks.add(mt);
+                }
             }
-
-//            List<Task> studentsTasks2 = taskService.createTaskQuery().taskAssignee(g.getId()).list();
-//            System.out.println("studentsTasks2 size: "+studentsTasks2);
-//            for(Task t : studentsTasks2){
-//                System.out.println(t.getId());
-//                MyTask mt = new MyTask();
-//                mt.setId(t.getId());
-//                mt.setName(t.getName());
-//                allTasks.add(mt);
-//                System.out.println(mt.toString());
-//            }
-//            List<Task> studentsTasks22 = taskService.createTaskQuery().taskCandidateOrAssigned(g.getId()).list();
-//            System.out.println("studentsTasks22 size: "+studentsTasks22);
-//            for(Task t : studentsTasks22){
-//                System.out.println(t.getId());
-////                MyTask mt = new MyTask();
-////                mt.setId(t.getId());
-////                mt.setName(t.getName());
-////                allTasks.add(mt);
-//            }
         }
 
         for(MyTask mt: allTasks){
@@ -207,21 +273,16 @@ public class TryControler {
                 mf.setType(f.getType().getName().toString());
                 myForms.add(mf);
             }
+            System.out.println(mt.toString());
             mt.setMyFormList(myForms);
         }
-
-
         Gson gson = new Gson();
         String json = gson.toJson(allTasks);
-        System.out.println(json);
         return new ResponseEntity<String>(json,HttpStatus.OK);
     }
 
     @RequestMapping(value="/execute/{taskId}", method = RequestMethod.POST)
     public Response execcuteTask(@PathVariable String taskId, String username, @RequestParam Map<String,String> allRequestParams){
-
-        System.out.println(allRequestParams);
-
         Task task = null;
         for (Task t : taskService.createTaskQuery().taskCandidateUser(username).list()){
             if (t.getId().equals(taskId)){
@@ -229,35 +290,51 @@ public class TryControler {
                 task = t;
             }
         }
+        System.out.println(allRequestParams.entrySet().toString());
         TaskFormData tfd =  formService.getTaskFormData(taskId);
         List<FormProperty>   fpList = tfd.getFormProperties();
         Map<String, String> params = new HashMap<>();
         for(FormProperty fp: fpList){
-            System.out.println(fp.getType());
-            for(String s: allRequestParams.keySet()){
-                System.out.println(s);
-                System.out.println("C");
-                if(fp.getName().equals(s)){
-                    if(s.equals("on")||s.equals("off")){
-                        String bool = (s.equals("on"))? "true" : "false";
-                        params.put(fp.getId(), bool);
-                    }else{
-                        params.put(fp.getId(), s);
+            for(Map.Entry<String, String> entry: allRequestParams.entrySet()){
+                System.out.println(entry.toString());
+                if(!fp.getType().getName().equals("boolean")){
+                    if(fp.getName().equals(entry.getKey())) {
+                        System.out.println("    Trenutni postavljeni kljuc je: " + fp.getId() + ", a vrednost: " + entry.getValue());
+                        params.put(fp.getId(), entry.getValue());
+                        continue;
                     }
-                    System.out.println(allRequestParams.get(s)+" uraaaa");
+                    continue;
+                }else{
+                    if(allRequestParams.containsKey(fp.getName())){
+                        if(fp.getName().equals(entry.getKey())){
+                            String bool = (entry.getValue().equals("on"))? "true" : "false";
+                            System.out.println("            Trenutni postavljeni kljuc je: "+fp.getId()+", a vrednost(bool): "+bool);
+                            params.put(fp.getId(), bool);
+                            continue;
+                        }
+                        continue;
+                    }else{
+                        if(fp.getType().getName().equals("boolean")){
+                            if(params.get(fp.getId())!=null){
+                                System.out.println("    Trenutni postavljeni kljuc je: "+fp.getId()+", a vrednost: false");
+                                params.put(fp.getId(), "false");
+                            }
+                            continue;
+                        }
+                        continue;
+                    }
                 }
             }
         }
         formService.submitTaskFormData(taskId, params);
-//        Map<String, String > params = new HashMap<>();
-//        params.put("ime_studenta", "Djoko");
-//        params.put("prezime_studenta", "Salic");
-//        params.put("broj_indeksa", "sf13-2014");
-//        params.put("predlog_teme","testTEma");
-//        params.put("predlog_mentora", "TEst Test");
-//        params.put("vrsta_studenta", "true");
-//
-        return Response.ok("Zadatak uspesno izvrsen").build();
+
+        try{
+            URI uri = new URI("http://localhost:8080");
+            return Response.temporaryRedirect(uri).build();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return Response.noContent().build();
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -274,7 +351,6 @@ public class TryControler {
             return Response.status(Response.Status.UNAUTHORIZED).build();
         }
     }
-
 
     @RequestMapping(value =  "/checkAll", method = RequestMethod.GET)
     public void checkAll(){
