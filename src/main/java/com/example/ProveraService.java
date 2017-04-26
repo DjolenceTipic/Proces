@@ -1,6 +1,7 @@
-package com.example.serviceTasks;
+package com.example;
 
 import org.activiti.engine.delegate.DelegateExecution;
+import org.activiti.engine.delegate.Expression;
 import org.activiti.engine.delegate.JavaDelegate;
 
 /**
@@ -8,7 +9,12 @@ import org.activiti.engine.delegate.JavaDelegate;
  */
 public class ProveraService implements JavaDelegate {
 
+    Expression check;
+
     public void execute(DelegateExecution execution) throws Exception {
         System.out.println("usao sam u ProveraService");
+
+        Boolean check = true;
+        execution.setVariable("check", check);
     }
 }
