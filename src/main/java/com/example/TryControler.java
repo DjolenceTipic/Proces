@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.ws.rs.core.Response;
 
@@ -276,7 +277,7 @@ public class TryControler {
     }
 
     @RequestMapping(value="/execute/{taskId}", method = RequestMethod.POST)
-    public Response execcuteTask(@PathVariable String taskId, String username, @RequestParam Map<String,String> allRequestParams){
+    public RedirectView execcuteTask(@PathVariable String taskId, String username, @RequestParam Map<String,String> allRequestParams){
         Task task = null;
         for (Task t : taskService.createTaskQuery().taskCandidateUser(username).list()){
             if (t.getId().equals(taskId)){
@@ -329,13 +330,7 @@ public class TryControler {
         }
         formService.submitTaskFormData(taskId, params);
 
-        try{
-            URI uri = new URI("http://localhost:8080");
-            return Response.temporaryRedirect(uri).build();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return Response.noContent().build();
+        return new RedirectView("http://localhost:8080");
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
