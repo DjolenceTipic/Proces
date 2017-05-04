@@ -104,3 +104,13 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+#task-readonly{
+    border: 1px solid #f3f3f3;
+    border-radius: 10px;
+}
+
+#task-form{
+    border: 1px solid #f3f3f3;
+    border-radius: 10px;
+}
