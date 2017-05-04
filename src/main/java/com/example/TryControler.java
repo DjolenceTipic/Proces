@@ -366,7 +366,7 @@ public class TryControler {
             System.out.println("entry.toString(): "+entry.toString());
             if(!entry.getValue().equals("")){
                 if(isInSearchedGroups(entry)){
-                    if(entry.getKey().equals("mentor_izabrani")){
+                    if(entry.getKey().equals("predlog_mentora")){
                         addToGroup(entry, "mentorIzabrani");
                     }
                     addToGroupAndMember(entry, "presednik_komisije", komisija);
@@ -379,11 +379,10 @@ public class TryControler {
     }
 
     private boolean isInSearchedGroups(Map.Entry<String, String> entry) {
-        return entry.getKey().equals("presednik_komisije") || entry.getKey().equals("mentor_izabrani") || entry.getKey().equals("treci_clan")||entry.getKey().equals("cetvrti_clan")||entry.getKey().equals("peti_clan");
+        return entry.getKey().equals("presednik_komisije") || entry.getKey().equals("predlog_mentora") || entry.getKey().equals("treci_clan")||entry.getKey().equals("cetvrti_clan")||entry.getKey().equals("peti_clan");
     }
 
     private void addToGroupAndMember(Map.Entry<String, String> entry, String nameOfGroup, Map<String, Object> komisija) {
-        System.out.println("imamo u komisiji: "+entry.getKey()+ "presednik_komisije");
         if(entry.getKey().equals(nameOfGroup)){
             System.out.println(entry.getValue().toString());
             String fullName = entry.getValue().toString();

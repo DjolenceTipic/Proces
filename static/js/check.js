@@ -17,7 +17,11 @@ $(document).ready(function () {
                                 if(json[0].myFormList[j].isWritable == "false"){
                                     $("#task-readonly").append("<div>"+json[i].myFormList[j].name+" : "+json[i].myFormList[j].value+"</div>");
                                 }else{
-                                    $("#form-task").append("<tr><td>"+json[0].myFormList[j].name+"</td><td><input id=" + json[0].myFormList[j].id + " name="+ json[0].myFormList[j].name + " type='text'/></td></tr>")
+                                    if(json[0].myFormList[j].hasOwnProperty("value")){
+                                        $("#form-task").append("<tr><td>"+json[0].myFormList[j].name+"</td><td><input id=" + json[0].myFormList[j].id + " name="+ json[0].myFormList[j].name + " type='text' value="+json[0].myFormList[j].value+"/></td></tr>")
+                                    }else{
+                                        $("#form-task").append("<tr><td>"+json[0].myFormList[j].name+"</td><td><input id=" + json[0].myFormList[j].id + " name="+ json[0].myFormList[j].name + " type='text'/></td></tr>")
+                                    }
                                 }
                             }else if(json[0].myFormList[j].type=="boolean"){
                                 $("#form-task").append("<tr><td>"+json[0].myFormList[j].name+"</td><td><input id=" + json[0].myFormList[j].id + " name="+ json[0].myFormList[j].name + " type='checkbox'/></td></tr>")

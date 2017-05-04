@@ -35,11 +35,11 @@
 		<subProcess activiti:exclusive="true" id="subprocess1" name="Proces kada predaju stari i ostali studenti zahtev" triggeredByEvent="false">
 			<userTask activiti:candidateGroups="ReferentSS" activiti:exclusive="true" id="usertask2" name="Referent salje zahtev rukovodiocu">
 				<extensionElements>
-					<activiti:formProperty id="ime_studenta" name="ImeStudenta" type="string" writable="false"/>
-					<activiti:formProperty id="prezime_studenta" name="PrezimeStudenta" type="string" writable="false"/>
-					<activiti:formProperty id="broj_indeksa" name="BrojIndaksa" type="string" writable="false"/>
-					<activiti:formProperty id="predlog_teme" name="PredlogTeme" type="string" writable="false"/>
-					<activiti:formProperty id="predlog_mentora" name="PredlogMentora" type="string" writable="false"/>
+					<activiti:formProperty id="ime_mentora" name="ImeMentora" type="string"/>
+					<activiti:formProperty id="prezime_mentora" name="PrezimeMentora" type="string"/>
+					<activiti:formProperty id="username_mentora" name="UsernameMentora" type="string"/>
+					<activiti:formProperty id="password_mentora" name="PasswordMentora" type="string"/>
+					<activiti:formProperty id="email_mentora" name="EmailMentora" type="string"/>
 				</extensionElements>
 			</userTask>
 			<userTask activiti:assignee="zapisnicar" activiti:candidateGroups="zapisnicar" activiti:exclusive="true" id="usertask3" name="Rukovodilac i komisija donose odluku o eventualnim dopunama i salju odluku studentskoj sluzbi">
@@ -210,8 +210,7 @@
 					<activiti:formProperty id="prezime_studenta" name="PrezimeStudenta" type="string" writable="false"/>
 					<activiti:formProperty id="broj_indeksa" name="BrojIndaksa" type="string" writable="false"/>
 					<activiti:formProperty id="predlog_teme" name="PredlogTeme" type="string" writable="false"/>
-					<activiti:formProperty id="predlog_mentora" name="PredlogMentora" type="string" writable="false"/>
-					<activiti:formProperty id="mentor_izabrani" name="Mentor" required="true" type="string"/>
+					<activiti:formProperty id="predlog_mentora" name="PredlogMentora" type="string"/>
 					<activiti:formProperty id="presednik_komisije" name="Presednik" required="true" type="string"/>
 					<activiti:formProperty id="treci_clan" name="TreciClan" required="true" type="string"/>
 					<activiti:formProperty id="cetvrti_clan" name="CetvrtiClan" type="string"/>
