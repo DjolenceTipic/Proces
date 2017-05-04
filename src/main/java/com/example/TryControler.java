@@ -263,6 +263,8 @@ public class TryControler {
             List<FormProperty> fpList = tfd.getFormProperties();
             for(FormProperty f : fpList){
                 MyForm mf = new MyForm();
+                mf.setValue(f.getValue());
+                mf.setIsWritable(String.valueOf(f.isWritable()));
                 mf.setId(f.getId());
                 mf.setName(f.getName());
                 mf.setType(f.getType().getName().toString());
@@ -273,6 +275,9 @@ public class TryControler {
         }
         Gson gson = new Gson();
         String json = gson.toJson(allTasks);
+        System.out.println();
+        System.out.println(allTasks);
+        System.out.println();
         return new ResponseEntity<String>(json,HttpStatus.OK);
     }
 

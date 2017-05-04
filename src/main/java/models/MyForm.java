@@ -8,15 +8,8 @@ public class MyForm {
     private String id;
     private String name;
     private String type;
-
-    public MyForm(String id, String name, String type) {
-        this.id = id;
-        this.name = name;
-        this.type = type;
-    }
-
-    public MyForm() {
-    }
+    private String isWritable;
+    private String value;
 
     public String getId() {
         return id;
@@ -40,5 +33,43 @@ public class MyForm {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getIsWritable() {
+        return isWritable;
+    }
+
+    public void setIsWritable(String isWritable) {
+        this.isWritable = isWritable;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public MyForm(String id, String name, String type, String isWritable, String value) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.isWritable = isWritable;
+        this.value = value;
+    }
+
+    public MyForm() {
+    }
+
+    @Override
+    public String toString() {
+        return "MyForm{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", type='" + type + '\'' +
+                ", isWritable='" + isWritable + '\'' +
+                ", value='" + value + '\'' +
+                '}';
     }
 }

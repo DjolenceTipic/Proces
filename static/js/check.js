@@ -14,11 +14,17 @@ $(document).ready(function () {
                         $("#task-form").append("<form action='http://localhost:8080/execute/"+json[i].id+"?username="+currentUser+"' method='POST'><table id='form-task'></table></form>")
                         for(var j=0; j< json[0].myFormList.length; j++){
                             if (json[0].myFormList[j].type == "string"){
-                                $("#form-task").append("<tr><td>"+json[0].myFormList[j].name+"</td><td><input id=" + json[0].myFormList[j].id + " name="+ json[0].myFormList[j].name + " type='text'/></td></tr>")
+                                if(json[0].myFormList[j].isWritable == "false"){
+                                    $("#task-readonly").append("<div>"+json[i].myFormList[j].name+" : "+json[i].myFormList[j].value+"</div>");
+                                }else{
+                                    $("#form-task").append("<tr><td>"+json[0].myFormList[j].name+"</td><td><input id=" + json[0].myFormList[j].id + " name="+ json[0].myFormList[j].name + " type='text'/></td></tr>")
+                                }
                             }else if(json[0].myFormList[j].type=="boolean"){
                                 $("#form-task").append("<tr><td>"+json[0].myFormList[j].name+"</td><td><input id=" + json[0].myFormList[j].id + " name="+ json[0].myFormList[j].name + " type='checkbox'/></td></tr>")
                             }else if(json[0].myFormList[j].type=="long"){
                                 $("#form-task").append("<tr><td>"+json[0].myFormList[j].name+"</td><td><input id=" + json[0].myFormList[j].id + " name="+ json[0].myFormList[j].name + " type='long'/></td></tr>")
+                            }else if(json[0].myFormList[j].isWritable == "false"){
+                                alert("bla!");
                             }else{
                                 $("#form-task").append("<tr><td>"+json[0].myFormList[j].name+"</td><td><input id=" + json[0].myFormList[j].id + " name="+ json[0].myFormList[j].name + " type='date'/></td></tr>")
                             }

@@ -51,6 +51,10 @@ public class MyTask {
 
     @Override
     public String toString() {
-        return super.toString();
+        return "MyTask{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", myFormList=" + myFormList +
+                '}';
     }
 }
